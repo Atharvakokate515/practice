@@ -1,0 +1,41 @@
+name: Daily Commits (8–9 per day)
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # Runs once per day at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  commits:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Generate 8–9 Commits
+        run: |
+          # Random number between 8 and 9
+          COMMITS=$(( 8 + RANDOM % 2 ))
+          echo "Today's commit target: $COMMITS"
+
+          for ((i=1; i<=COMMITS; i++)); do
+            # Write timestamp to file
+            echo "Commit $i at $(date)" >> activity.txt
+            
+            # Configure git
+            git config --local user.email "bot@example.com"
+            git config --local user.name "Green Bot"
+
+            # Commit changes
+            git add .
+            git commit -m "Automated commit $i"
+
+            # Sleep between 5 to 60 minutes to spread the commits
+            SLEEP_TIME=$(( 300 + RANDOM % 3600 ))
+            echo "Sleeping for $SLEEP_TIME seconds..."
+            sleep $SLEEP_TIME
+          done
+          
+      - name: Push changes
+        run: git push
