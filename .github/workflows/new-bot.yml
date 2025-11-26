@@ -1,4 +1,4 @@
-name: Daily Commits (8–9 per day)
+name: Daily Commits (6-7 per day)
 
 on:
   schedule:
