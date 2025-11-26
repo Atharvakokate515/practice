@@ -24,8 +24,8 @@ jobs:
             echo "Commit $i at $(date)" >> activity.txt
             
             # Configure git
-            git config --local user.email "bot@example.com"
-            git config --local user.name "Green Bot"
+            git config --local user.email "katharva515@gmail.com"
+            git config --local user.name "Atharvakokate515"
 
             # Commit changes
             git add .
