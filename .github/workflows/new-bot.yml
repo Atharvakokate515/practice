@@ -16,7 +16,7 @@ jobs:
       - name: Generate 8–9 Commits
         run: |
           # Random number between 8 and 9
-          COMMITS=$(( 8 + RANDOM % 2 ))
+          COMMITS=$(( 6 + RANDOM % 2 ))
           echo "Today's commit target: $COMMITS"
 
           for ((i=1; i<=COMMITS; i++)); do
