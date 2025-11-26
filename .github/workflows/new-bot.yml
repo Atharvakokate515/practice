@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Generate 8–9 Commits
+      - name: Generate 6-7 Commits
         run: |
           # Random number between 8 and 9
           COMMITS=$(( 6 + RANDOM % 2 ))
