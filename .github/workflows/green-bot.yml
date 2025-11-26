@@ -1,0 +1,45 @@
+name: Green Activity Bot
+
+on:
+  schedule:
+    - cron: "0 * * * *"   # Runs every hour
+  workflow_dispatch:
+
+jobs:
+  commit-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Generate Hourly Commit
+        run: |
+          echo "Hourly update at $(date)" >> activity.txt
+
+      - name: Maybe Generate Random Extra Commits
+        run: |
+          # Randomly choose whether today gets extra commits (30% chance)
+          RAND_DAY=$(( RANDOM % 10 ))
+          if [ $RAND_DAY -lt 3 ]; then
+            EXTRA=$(( 7 + RANDOM % 3 ))   # 7, 8 or 9 commits
+            echo "Today will get $EXTRA extra commits."
+
+            for ((i=1; i<=EXTRA; i++)); do
+              # Random minutes delay (1–20 min)
+              SLEEP_TIME=$(( 60 + RANDOM % 1200 ))
+              echo "Sleeping $SLEEP_TIME seconds before commit $i..."
+              sleep $SLEEP_TIME
+
+              echo "Random commit $i at $(date)" >> activity.txt
+              git config --local user.email "bot@example.com"
+              git config --local user.name "Green Bot"
+              git add .
+              git commit -m "Random commit $i"
+            done
+          else
+            echo "No extra commits today."
+          fi
+
+      - name: Push changes
+        run: |
+          git push
