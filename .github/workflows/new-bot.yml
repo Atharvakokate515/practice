@@ -1,8 +1,11 @@
 name: Daily Commits (6-7 per day)
 
+permissions:
+  contents: write     # <----- REQUIRED
+
 on:
   schedule:
-    - cron: "0 0 * * *"   # Runs once per day at midnight UTC
+    - cron: "0 0 * * *"
   workflow_dispatch:
 
 jobs:
@@ -12,30 +15,27 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}   # <---- REQUIRED
 
       - name: Generate 6-7 Commits
         run: |
-          # Random number between 8 and 9
           COMMITS=$(( 6 + RANDOM % 2 ))
           echo "Today's commit target: $COMMITS"
 
           for ((i=1; i<=COMMITS; i++)); do
-            # Write timestamp to file
             echo "Commit $i at $(date)" >> activity.txt
-            
-            # Configure git
+
             git config --local user.email "katharva515@gmail.com"
             git config --local user.name "Atharvakokate515"
 
-            # Commit changes
             git add .
             git commit -m "Automated commit $i"
 
-            # Sleep between 5 to 60 minutes to spread the commits
             SLEEP_TIME=$(( 300 + RANDOM % 3600 ))
             echo "Sleeping for $SLEEP_TIME seconds..."
             sleep $SLEEP_TIME
           done
-          
+
       - name: Push changes
-        run: git push
+        run: git push origin HEAD:${{ github.ref_name }}
